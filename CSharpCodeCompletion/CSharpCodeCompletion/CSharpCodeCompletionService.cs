@@ -43,11 +43,7 @@ namespace CSharpCodeCompletion
 			var semanticInfo = semanticModel.GetTypeInfo(identifier);
 			var type = semanticInfo.Type;
 
-			var symbols = semanticModel
-				.LookupSymbols(
-				              position, 
-				              type
-			              );
+			var symbols = semanticModel.LookupSymbols(position, type);
 
 			List<string> suggestions = new List<string>();
 			foreach (var symbol in symbols)
