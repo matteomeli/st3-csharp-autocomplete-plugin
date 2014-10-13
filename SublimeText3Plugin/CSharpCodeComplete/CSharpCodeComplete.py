@@ -10,7 +10,12 @@ class CSharpCodeCompleteCommand(sublime_plugin.TextCommand):
 
 		sel = self.view.sel()[0]
 
-		p = subprocess.Popen(["mono", r"/Users/matteom/Library/Application Support/Sublime Text 3/Packages/CSharpCodeComplete/Service/CSharpCodeCompleteClient.exe", self.view.substr(sublime.Region(0, self.view.size())), str(sel.begin())], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		command = "mono"
+		executable = r"/Users/matteom/Library/Application Support/Sublime Text 3/Packages/CSharpCodeComplete/Service/CSharpCodeCompleteClient.exe"
+		code = self.view.substr(sublime.Region(0, self.view.size()))
+		cursor = str(sel.begin())
+		
+		p = subprocess.Popen([command, executable, code, cursor], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		out, err = p.communicate()
 		p.wait()
 
