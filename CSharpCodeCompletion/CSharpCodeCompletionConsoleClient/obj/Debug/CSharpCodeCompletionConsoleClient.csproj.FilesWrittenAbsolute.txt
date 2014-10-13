@@ -1,0 +1,11 @@
+/Users/matteomeli/Repos/st3-codecompletion/CSharpCodeCompletion/CSharpCodeCompletionConsoleClient/obj/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/Users/matteomeli/Repos/st3-codecompletion/CSharpCodeCompletion/CSharpCodeCompletionConsoleClient/bin/Debug/CSharpCodeCompletionConsoleClient.exe.mdb
+/Users/matteomeli/Repos/st3-codecompletion/CSharpCodeCompletion/CSharpCodeCompletionConsoleClient/bin/Debug/CSharpCodeCompletionConsoleClient.exe
+/Users/matteomeli/Repos/st3-codecompletion/CSharpCodeCompletion/CSharpCodeCompletionConsoleClient/obj/Debug/CSharpCodeCompletionConsoleClient.exe
+/Users/matteomeli/Repos/st3-codecompletion/CSharpCodeCompletion/CSharpCodeCompletionConsoleClient/obj/Debug/CSharpCodeCompletionConsoleClient.exe.mdb
+/Users/matteomeli/Repos/st3-codecompletion/CSharpCodeCompletion/CSharpCodeCompletionConsoleClient/bin/Debug/CSharpCodeCompletion.dll
+/Users/matteomeli/Repos/st3-codecompletion/CSharpCodeCompletion/CSharpCodeCompletionConsoleClient/bin/Debug/CSharpCodeCompletion.dll.mdb
+/Users/matteomeli/Repos/st3-codecompletion/CSharpCodeCompletion/CSharpCodeCompletionConsoleClient/bin/Debug/Microsoft.CodeAnalysis.dll
+/Users/matteomeli/Repos/st3-codecompletion/CSharpCodeCompletion/CSharpCodeCompletionConsoleClient/bin/Debug/Microsoft.CodeAnalysis.CSharp.dll
+/Users/matteomeli/Repos/st3-codecompletion/CSharpCodeCompletion/CSharpCodeCompletionConsoleClient/bin/Debug/System.Collections.Immutable.dll
+/Users/matteomeli/Repos/st3-codecompletion/CSharpCodeCompletion/CSharpCodeCompletionConsoleClient/bin/Debug/System.Reflection.Metadata.dll

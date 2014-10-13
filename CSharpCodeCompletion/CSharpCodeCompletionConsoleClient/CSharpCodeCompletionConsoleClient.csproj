@@ -36,9 +36,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\CSharpCodeCompletion\CSharpCodeCompletion.csproj">
+    <ProjectReference Include="..\CSharpCodeCompletion\CSharpCodeComplete.csproj">
       <Project>{525183E8-56B8-46AC-A525-905A166F984C}</Project>
-      <Name>CSharpCodeCompletion</Name>
+      <Name>CSharpCodeComplete</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

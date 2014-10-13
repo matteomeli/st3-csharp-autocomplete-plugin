@@ -1,0 +1,15 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="CSharpCodeCompleteClient/Test.cs">
+    <Files>
+      <File FileName="CSharpCodeCompletion/CSharpCodeCompletionService.cs" Line="1" Column="1" />
+      <File FileName="CSharpCodeCompleteClient/CodeComplete.cs" Line="36" Column="36" />
+      <File FileName="CSharpCodeCompletionConsoleClient/Program.cs" Line="24" Column="24" />
+      <File FileName="CSharpCodeCompleteClient/Test.cs" Line="2" Column="2" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

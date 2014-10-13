@@ -7,18 +7,18 @@ namespace CSharpCodeCompletionConsoleClient
 	{
 		public static void Main(string[] args)
 		{
-			Console.WriteLine("Roslyn C# Code Completion Cponsole Client says: 'Hello World!'");
+			Console.WriteLine("Roslyn C# Code Completion Console Client says: 'Hello World!'");
 
 			const string code = @"
-    using System;
-    public class Test
+using System;
+public class Test
+{
+    public void TestMethod()
     {
-        public void TestMethod()
-        {
-            var now = DateTime.Now;
-            now.
-        }
-    }";
+        var now = DateTime.Now;
+        now.
+    }
+}";
 
 			// In the future the cursor position will come from the command line 
 			// (from SublimeText for example) as the code string as well:
@@ -30,7 +30,7 @@ namespace CSharpCodeCompletionConsoleClient
 			Console.WriteLine();
 
 			CSharpCodeCompletionService service = new CSharpCodeCompletionService();
-			var suggestions = service.Suggest(code, cursorPosition, 0);
+			var suggestions = service.Suggest(code, cursorPosition);
 
 			Console.WriteLine("Suggestions: ");
 			foreach (var s in suggestions)
@@ -39,9 +39,9 @@ namespace CSharpCodeCompletionConsoleClient
 			}
 			Console.WriteLine();
 
-			var suggestionJSON = service.SuggestToJSON(code, cursorPosition, 0);
-			Console.WriteLine("Suggestions (JSON): ");
-			Console.WriteLine(suggestionJSON);
+			//var suggestionJSON = service.SuggestToJSON(code, cursorPosition);
+			//Console.WriteLine("Suggestions (JSON): ");
+			//Console.WriteLine(suggestionJSON);
 		}
 	}
 }
