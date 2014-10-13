@@ -42,7 +42,4 @@
       <Name>CSharpCodeComplete</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Test.cs" />
-  </ItemGroup>
 </Project>
