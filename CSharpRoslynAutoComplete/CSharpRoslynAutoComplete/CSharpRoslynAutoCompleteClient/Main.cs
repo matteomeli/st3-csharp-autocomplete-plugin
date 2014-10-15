@@ -16,9 +16,10 @@ namespace CSharpRoslynAutoCompleteClient
 			string currentParameter = string.Empty;
 
 			string code = string.Empty;
-			int cursor = 0;
+			int cursor = -1;
 			List<string> assemblyPaths = new List<string>();
 
+			// Build the arguments list
 			var p = new OptionSet()
 			{
 				{ "p|program=", "the {PROGRAM} string to parse.", 
@@ -33,7 +34,7 @@ namespace CSharpRoslynAutoCompleteClient
 						currentParameter = "c";
 						cursor = v;
 					}},
-				{ "d|dlls=", "the {ASSEMBLY} filename values to load with the {PROGRAM}.",
+				{ "d|dlls", "the {ASSEMBLY} filename values to load with the {PROGRAM}.",
 					v => currentParameter = "d" },
 				{ "v", "increase debug message verbosity",
 					v => { if (v != null) ++verbosity; } },
@@ -49,7 +50,9 @@ namespace CSharpRoslynAutoCompleteClient
 					v => show_help = v != null },
 			};
 
-			try {
+			// Parse the arguments
+			try
+			{
 				p.Parse(args);
 			}
 			catch (OptionException e)
@@ -66,6 +69,20 @@ namespace CSharpRoslynAutoCompleteClient
 				return;
 			}
 
+			// Check for required arguments
+			if (string.IsNullOrEmpty(code))
+			{
+				Console.WriteLine("CSharpRoslynAutoCompleteClient.exe: Missing required option -p|program=<PROGRAM>");
+				Console.WriteLine("Try `CSharpRoslynAutoCompleteClient.exe --help' for more information.");
+				return;
+			}
+			else if (cursor < 0)
+			{
+				Console.WriteLine("CSharpRoslynAutoCompleteClient.exe: Missing required option -c|cursor=<CURSOR>");
+				Console.WriteLine("Try `CSharpRoslynAutoCompleteClient.exe --help' for more information.");
+				return;
+			}
+
 			var prompter = new CSharpPrompter();
 			var suggestions = prompter.Prompt(code, cursor, assemblyPaths);
 
@@ -76,7 +93,7 @@ namespace CSharpRoslynAutoCompleteClient
 			}
 		}
 
-		static void ShowHelp (OptionSet p)
+		static void ShowHelp(OptionSet p)
 		{
 			Console.WriteLine("Usage: CSharpRoslynAutoCompleteClient.exe [OPTIONS]+");
 			Console.WriteLine("Prompt code suggestions at current cursor position inside a C# program.");
