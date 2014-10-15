@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization.Json;
 using System.IO;
+using System.Reflection;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -23,7 +24,8 @@ namespace CSharpRoslynAutoComplete
 			var syntaxTree = CSharpSyntaxTree.ParseText(code);
 			var compilation = CSharpCompilation.Create("MyCompilation")
 				.AddSyntaxTrees(syntaxTree)
-				.AddReferences(MetadataReference.CreateFromAssembly(typeof(object).Assembly));
+				.AddReferences(MetadataReference.CreateFromAssembly(typeof(object).Assembly))
+				.AddReferences(MetadataReference.CreateFromAssembly(Assembly.LoadFrom(@"/Applications/Unity454/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll")));
 
 			var semanticModel = compilation.GetSemanticModel(syntaxTree);
 			var token = syntaxTree.GetRoot().FindToken(position);
@@ -63,8 +65,7 @@ namespace CSharpRoslynAutoComplete
 			foreach (var symbol in symbols)
 			{
 				if (symbol.CanBeReferencedByName == false
-				    || symbol.DeclaredAccessibility != Accessibility.Public
-				    || symbol.IsStatic)
+				    || symbol.DeclaredAccessibility != Accessibility.Public)
 					continue;
 
 				var result = symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);

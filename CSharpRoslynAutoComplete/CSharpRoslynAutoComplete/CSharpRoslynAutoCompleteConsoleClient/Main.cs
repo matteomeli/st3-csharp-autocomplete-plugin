@@ -11,15 +11,16 @@ namespace CSharpCodeCompletionConsoleClient
 
 			const string code = @"
 using System;
+using UnityEngine;
 public class Test
 {
     public void TestMethod()
     {
         var now = DateTime.Now;
-        now.
+        var s = now.ToString();
+        Debug.
     }
 }";
-
 			// Simulate the cursor location at the last dot.
 			int cursorPosition = code.LastIndexOf(".", StringComparison.InvariantCulture);
 
