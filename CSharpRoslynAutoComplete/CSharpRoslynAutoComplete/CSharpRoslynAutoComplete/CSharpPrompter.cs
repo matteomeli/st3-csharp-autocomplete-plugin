@@ -12,7 +12,7 @@ namespace CSharpRoslynAutoComplete
 {
 	public class CSharpPrompter
 	{
-		public List<string> Prompt(string code, int position)
+		public List<string> Prompt(string code, int position, List<string> references)
 		{
 			code = code.Trim();
 
@@ -25,7 +25,7 @@ namespace CSharpRoslynAutoComplete
 			var compilation = CSharpCompilation.Create("MyCompilation")
 				.AddSyntaxTrees(syntaxTree)
 				.AddReferences(MetadataReference.CreateFromAssembly(typeof(object).Assembly))
-				.AddReferences(MetadataReference.CreateFromAssembly(Assembly.LoadFrom(@"/Applications/Unity454/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll")));
+				.AddReferences(references.Select<string, MetadataReference>(r => MetadataReference.CreateFromAssembly(Assembly.LoadFrom(r))));
 
 			var semanticModel = compilation.GetSemanticModel(syntaxTree);
 			var token = syntaxTree.GetRoot().FindToken(position);
@@ -65,7 +65,8 @@ namespace CSharpRoslynAutoComplete
 			foreach (var symbol in symbols)
 			{
 				if (symbol.CanBeReferencedByName == false
-				    || symbol.DeclaredAccessibility != Accessibility.Public)
+				    || symbol.DeclaredAccessibility != Accessibility.Public
+					|| symbol.IsStatic)
 					continue;
 
 				var result = symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);

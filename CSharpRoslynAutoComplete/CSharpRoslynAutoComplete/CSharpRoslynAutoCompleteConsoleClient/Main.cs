@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CSharpRoslynAutoComplete;
 
 namespace CSharpCodeCompletionConsoleClient
@@ -17,8 +18,7 @@ public class Test
     public void TestMethod()
     {
         var now = DateTime.Now;
-        var s = now.ToString();
-        Debug.
+        now.
     }
 }";
 			// Simulate the cursor location at the last dot.
@@ -28,14 +28,12 @@ public class Test
 			Console.WriteLine();
 
 			var prompter = new CSharpPrompter();
-			var suggestions = prompter.Prompt(code, cursorPosition);
+			var suggestions = prompter.Prompt(code, cursorPosition, new List<string>());
 
-			Console.WriteLine("Suggestions: ");
 			foreach (var s in suggestions)
 			{
 				Console.WriteLine(s);
 			}
-			Console.WriteLine();
 
 			// TODO: Allow moving cursor from command line + interface for it
 		}

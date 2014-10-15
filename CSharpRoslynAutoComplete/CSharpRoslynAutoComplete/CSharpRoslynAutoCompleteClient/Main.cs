@@ -1,45 +1,90 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using CSharpRoslynAutoComplete;
+using NDesk.Options;
 
 namespace CSharpRoslynAutoCompleteClient
 {
 	class MainClass
 	{
+		static int verbosity;
+
+		static Logger logger = new Logger();
+
 		public static void Main(string[] args)
 		{
-			if (args.Length < 2)
+			bool show_help = false;
+			string currentParameter = string.Empty;
+
+			string code = string.Empty;
+			int cursor = 0;
+			List<string> assemblyPaths = new List<string>();
+
+			var p = new OptionSet()
 			{
-				PrintHelp();
+				{ "p|program:", "the {PROGRAM} string to parse.", 
+					v => {
+						currentParameter = "p";
+						code = v;
+					}},
+				{ "c|cursor:", 
+					"the current position of the {CURSOR} in the {PROGRAM}\n" +
+						"this must be an integer.",
+					(int v) => {
+						currentParameter = "c";
+						cursor = v;
+					}},
+				{ "d|dlls:", "the {ASSEMBLY} filename values to load with the {PROGRAM}.",
+					v => currentParameter = "d" },
+				{ "v", "increase debug message verbosity",
+					v => { if (v != null) ++verbosity; } },
+				{ "<>", v => {
+						switch (currentParameter)
+						{
+							case "d":
+								assemblyPaths.Add(v);
+								break;
+						}
+					}},
+				{ "h|help",  "show this message and exit", 
+					v => show_help = v != null },
+			};
+				
+			try {
+				p.Parse(args);
+			}
+			catch (OptionException e)
+			{
+				logger.LogError("CSharpRoslynAutoCompleteClient.exe: ");
+				logger.LogError(e.Message);
+				logger.LogError("Try `CSharpRoslynAutoCompleteClient.exe --help' for more information.");
 				return;
 			}
 
-			// Parse cursor position in code string
-			int cursorPosition = 0;
-			if (int.TryParse(args[1], out cursorPosition) == false)
+			if (show_help)
 			{
-				PrintHelp();
+				ShowHelp(p);
 				return;
 			}
-
-			// Read code string
-			string code = args[0];
 
 			var prompter = new CSharpPrompter();
-			var suggestions = prompter.Prompt(code, cursorPosition);
+			var suggestions = prompter.Prompt(code, cursor, assemblyPaths);
 
 			// Print any found suggestions
 			foreach (var s in suggestions)
 			{
-				Console.WriteLine(s);
+				logger.Log(s);
 			}
 		}
 
-		static void PrintHelp()
+		static void ShowHelp (OptionSet p)
 		{
-			Console.WriteLine("Usage: CSharpCodeCompleteClient <filename> <cursor>");
-			Console.WriteLine("\t<filename> - Name of the code file to open.");
-			Console.WriteLine("\t<cursor>   - Position of the cursor in the code file buffer.");
+			logger.LogError("Usage: CSharpRoslynAutoCompleteClient.exe [OPTIONS]+");
+			logger.LogError("Prompt code suggestions at current cursor position inside a C# program.");
+			logger.LogError();
+			logger.LogError("Options:");
+			p.WriteOptionDescriptions(Console.Error);
 		}
 	}
 }

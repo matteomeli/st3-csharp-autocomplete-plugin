@@ -27,6 +27,6 @@ Global
 		{FEA5A9FD-4ED7-442C-BC98-63100011EE97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = CSharpRoslynAutoCompleteClient\CSharpRoslynAutoCompleteClient.csproj
+		StartupItem = CSharpRoslynAutoCompleteConsoleClient\CSharpRoslynAutoCompleteConsoleClient.csproj
 	EndGlobalSection
 EndGlobal
