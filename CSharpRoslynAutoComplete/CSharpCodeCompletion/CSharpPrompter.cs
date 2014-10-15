@@ -7,11 +7,11 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpCodeCompletion
+namespace CSharpRoslynAutoComplete
 {
-	public class CSharpCodeCompletionService
+	public class CSharpPrompter
 	{
-		public List<string> Suggest(string code, int position)
+		public List<string> Prompt(string code, int position)
 		{
 			code = code.Trim();
 
@@ -87,23 +87,6 @@ namespace CSharpCodeCompletion
 			suggestions.Sort();
 
 			return suggestions;
-		}
-
-		public string SuggestToJSON(string code, int position)
-		{
-			var suggestions = Suggest(code, position);
-
-			var serializer = new DataContractJsonSerializer(typeof(List<string>));
-			var ms = new MemoryStream();
-			serializer.WriteObject(ms, suggestions);
-			ms.Position = 0;
-			var sr = new StreamReader(ms);
-
-			var result = sr.ReadToEnd();
-			sr.Close();
-			ms.Close();
-
-			return result;
 		}
 	}
 }

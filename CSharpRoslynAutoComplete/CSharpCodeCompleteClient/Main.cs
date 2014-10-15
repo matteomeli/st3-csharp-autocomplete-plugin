@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
-using CSharpCodeCompletion;
+using CSharpRoslynAutoComplete;
 
-namespace CSharpCodeCompleteClient
+namespace CSharpRoslynAutoCompleteClient
 {
 	class MainClass
 	{
@@ -14,9 +14,7 @@ namespace CSharpCodeCompleteClient
 				return;
 			}
 
-			// Parse code file
-			string code = args[0];
-
+			// Parse cursor position in code string
 			int cursorPosition = 0;
 			if (int.TryParse(args[1], out cursorPosition) == false)
 			{
@@ -24,20 +22,17 @@ namespace CSharpCodeCompleteClient
 				return;
 			}
 
-			var service = new CSharpCodeCompletionService();
-			var suggestions = service.Suggest(code, cursorPosition);
+			// Read code string
+			string code = args[0];
 
-			if (suggestions.Count > 0)
+			var prompter = new CSharpPrompter();
+			var suggestions = prompter.Prompt(code, cursorPosition);
+
+			// Print any found suggestions
+			foreach (var s in suggestions)
 			{
-				foreach (var s in suggestions)
-				{
-					Console.WriteLine(s);
-				}
+				Console.WriteLine(s);
 			}
-
-			//var suggestionJSON = service.SuggestToJSON(code, cursorPosition);
-			//Console.WriteLine("Suggestions (JSON): ");
-			//Console.WriteLine(suggestionJSON);
 		}
 
 		static void PrintHelp()

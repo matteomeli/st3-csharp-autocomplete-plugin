@@ -1,5 +1,5 @@
 ﻿using System;
-using CSharpCodeCompletion;
+using CSharpRoslynAutoComplete;
 
 namespace CSharpCodeCompletionConsoleClient
 {
@@ -20,17 +20,14 @@ public class Test
     }
 }";
 
-			// In the future the cursor position will come from the command line 
-			// (from SublimeText for example) as the code string as well:
-			// E.g.: public string Suggest(string code, int position, int line)
-			// For now simulate the cursor location at the last dot.
+			// Simulate the cursor location at the last dot.
 			int cursorPosition = code.LastIndexOf(".", StringComparison.InvariantCulture);
 
 			Console.WriteLine(code);
 			Console.WriteLine();
 
-			CSharpCodeCompletionService service = new CSharpCodeCompletionService();
-			var suggestions = service.Suggest(code, cursorPosition);
+			var prompter = new CSharpPrompter();
+			var suggestions = prompter.Prompt(code, cursorPosition);
 
 			Console.WriteLine("Suggestions: ");
 			foreach (var s in suggestions)
@@ -39,9 +36,7 @@ public class Test
 			}
 			Console.WriteLine();
 
-			//var suggestionJSON = service.SuggestToJSON(code, cursorPosition);
-			//Console.WriteLine("Suggestions (JSON): ");
-			//Console.WriteLine(suggestionJSON);
+			// TODO: Allow moving cursor from command line + interface for it
 		}
 	}
 }
