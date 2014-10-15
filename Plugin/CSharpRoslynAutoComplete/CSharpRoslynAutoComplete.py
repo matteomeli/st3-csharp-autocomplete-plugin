@@ -1,42 +1,75 @@
 import sublime, sublime_plugin
 
 import os
-import threading
 import subprocess
+import threading
 
 class CSharpRoslynAutoCompleteCommand(sublime_plugin.TextCommand):
 
 	def run(self, edit):
-		sel = self.view.sel()[0]
-		stringData = self.view.substr( sublime.Region( 0, self.view.size()) ), str(sel.begin() )
+		code = self.view.substr(sublime.Region(0, self.view.size()))
+		cursor = self.view.sel()[0].begin()
 
-		thread = threading.Thread( target=RunCodeComplete, args=( stringData, self ) )
+		thread = CSharpRoslynAutoCompleteCall(code, cursor)
 		thread.start()
 
-def RunCodeComplete( stringData, codeCompleteCommand ):
+		self.handle_thread(edit, thread)
 
-	def done(index):
-			if index != -1:
-				print("Inserting " + results[index])
-				codeCompleteCommand.view.insert(edit, sel.begin(), results[index])
+	def handle_thread(self, edit, thread, i = 0, dir = 1):
+		if thread.is_alive():
+			# This animates a little activity indicator in the status area
+			before = i % 8
+			after = (7) - before
+			if not after:
+				dir = -1
+			if not before:
+				dir = 1
+			i += dir
+			self.view.set_status('csharp-roslyn-auto-complete', 'CSharpRoslynAutoComplete [%s=%s]' % \
+				(' ' * before, ' ' * after))
 
-	command = "mono"
-	executable = r"~/Library/Application Support/Sublime Text 3/Packages/CSharpRoslynAutoComplete/CSharpRoslynAutoCompleteClient.exe"
-	executable = os.path.expanduser( executable )
-	code = stringData[0]
-	cursor = stringData[1]
-	
-	p = subprocess.Popen([command, executable, code, cursor], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-	out, err = p.communicate()
-	p.wait()
+			sublime.set_timeout(lambda: self.handle_thread(edit, thread, i, dir), 100)
+			return
 
-	if err:
-		print("Error: " + err.decode('utf-8'))
-		return
+		self.view.erase_status('csharp-roslyn-auto-complete')	
 
-	results = out.decode("utf-8").rsplit('\n')
-	results = [s for s in results if s]
-	if not results:
-		results.append("No results found.")
+		if thread.result:
+			self.suggest(edit, thread)
+		else:
+			sublime.status_message('CSharpRoslynAutoComplete could not find any syggestion.')
 
-	codeCompleteCommand.view.show_popup_menu(results, done)
+	def suggest(self, edit, thread):
+		def done(index):
+			if index >= 0:
+				sublime.status_message('CSharpRoslynAutoComplete successfully suggested completion %s%s.' % 
+					(self.view.substr(self.view.line(thread.cursor)).strip(), thread.result[index]))
+				self.view.run_command("insert", {"characters": thread.result[index]})
+		
+		self.view.show_popup_menu(thread.result, done)
+
+class CSharpRoslynAutoCompleteCall(threading.Thread):
+
+	def __init__(self, code, cursor):
+		self.code = code
+		self.cursor = cursor
+		self.result = None
+		self.pp = subprocess.PIPE
+		self.cwd = os.path.dirname(__file__)
+		self.command = "mono"
+		self.executable = "CSharpRoslynAutoCompleteClient.exe"
+		threading.Thread.__init__(self)
+
+	def run(self):
+		p = subprocess.Popen([self.command, self.executable, self.code, str(self.cursor)], 
+			cwd = self.cwd, stdout = self.pp, stderr = self.pp)
+		o, e = p.communicate()
+		p.wait()
+
+		if e:
+			err = 'Error: %s' % e.decode('utf-8')
+			sublime.error_message(err)
+			self.result = False
+			return
+
+		suggestions = o.decode("utf-8").rsplit('\n')
+		self.result = [s for s in suggestions if s]
