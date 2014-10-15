@@ -10,8 +10,6 @@ namespace CSharpRoslynAutoCompleteClient
 	{
 		static int verbosity;
 
-		static Logger logger = new Logger();
-
 		public static void Main(string[] args)
 		{
 			bool show_help = false;
@@ -23,19 +21,19 @@ namespace CSharpRoslynAutoCompleteClient
 
 			var p = new OptionSet()
 			{
-				{ "p|program:", "the {PROGRAM} string to parse.", 
+				{ "p|program=", "the {PROGRAM} string to parse.", 
 					v => {
 						currentParameter = "p";
 						code = v;
 					}},
-				{ "c|cursor:", 
+				{ "c|cursor=", 
 					"the current position of the {CURSOR} in the {PROGRAM}\n" +
 						"this must be an integer.",
 					(int v) => {
 						currentParameter = "c";
 						cursor = v;
 					}},
-				{ "d|dlls:", "the {ASSEMBLY} filename values to load with the {PROGRAM}.",
+				{ "d|dlls=", "the {ASSEMBLY} filename values to load with the {PROGRAM}.",
 					v => currentParameter = "d" },
 				{ "v", "increase debug message verbosity",
 					v => { if (v != null) ++verbosity; } },
@@ -50,15 +48,15 @@ namespace CSharpRoslynAutoCompleteClient
 				{ "h|help",  "show this message and exit", 
 					v => show_help = v != null },
 			};
-				
+
 			try {
 				p.Parse(args);
 			}
 			catch (OptionException e)
 			{
-				logger.LogError("CSharpRoslynAutoCompleteClient.exe: ");
-				logger.LogError(e.Message);
-				logger.LogError("Try `CSharpRoslynAutoCompleteClient.exe --help' for more information.");
+				Console.WriteLine("CSharpRoslynAutoCompleteClient.exe: ");
+				Console.WriteLine(e.Message);
+				Console.WriteLine("Try `CSharpRoslynAutoCompleteClient.exe --help' for more information.");
 				return;
 			}
 
@@ -74,16 +72,16 @@ namespace CSharpRoslynAutoCompleteClient
 			// Print any found suggestions
 			foreach (var s in suggestions)
 			{
-				logger.Log(s);
+				Console.WriteLine(s);
 			}
 		}
 
 		static void ShowHelp (OptionSet p)
 		{
-			logger.LogError("Usage: CSharpRoslynAutoCompleteClient.exe [OPTIONS]+");
-			logger.LogError("Prompt code suggestions at current cursor position inside a C# program.");
-			logger.LogError();
-			logger.LogError("Options:");
+			Console.WriteLine("Usage: CSharpRoslynAutoCompleteClient.exe [OPTIONS]+");
+			Console.WriteLine("Prompt code suggestions at current cursor position inside a C# program.");
+			Console.WriteLine();
+			Console.WriteLine("Options:");
 			p.WriteOptionDescriptions(Console.Error);
 		}
 	}
