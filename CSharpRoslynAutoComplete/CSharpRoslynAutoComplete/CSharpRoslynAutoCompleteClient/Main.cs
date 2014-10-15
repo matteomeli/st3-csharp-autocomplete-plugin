@@ -28,13 +28,15 @@ namespace CSharpRoslynAutoCompleteClient
 						code = v;
 					}},
 				{ "c|cursor=", 
-					"the current position of the {CURSOR} in the {PROGRAM}\n" +
+					"the current position of the {CURSOR} in the {PROGRAM} - " +
 						"this must be an integer.",
 					(int v) => {
 						currentParameter = "c";
 						cursor = v;
 					}},
-				{ "d|dlls", "the {ASSEMBLY} filename values to load with the {PROGRAM}.",
+				{ "d|dlls", 
+					"the {ASSEMBLY} filepath lists to load with the {PROGRAM} - " +
+						"this must be space separated paths.",
 					v => currentParameter = "d" },
 				{ "v", "increase debug message verbosity",
 					v => { if (v != null) ++verbosity; } },
