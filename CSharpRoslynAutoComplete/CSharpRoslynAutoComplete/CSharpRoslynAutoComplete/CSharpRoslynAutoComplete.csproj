@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{525183E8-56B8-46AC-A525-905A166F984C}</ProjectGuid>
+    <ProjectGuid>{C247AC90-A214-424D-B1B6-E2177958A986}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>CSharpCodeCompletion</RootNamespace>
-    <AssemblyName>CSharpCodeCompletion</AssemblyName>
+    <RootNamespace>CSharpRoslynAutoComplete</RootNamespace>
+    <AssemblyName>CSharpRoslynAutoComplete</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -29,8 +29,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="Microsoft.CodeAnalysis.CSharp.Desktop">
       <HintPath>Lib\Roslyn\Microsoft.CodeAnalysis.CSharp.Desktop.dll</HintPath>
     </Reference>
@@ -49,6 +47,8 @@
     <Reference Include="System.Reflection.Metadata">
       <HintPath>Lib\Roslyn\System.Reflection.Metadata.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -57,5 +57,13 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Lib\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Lib\Roslyn\Microsoft.CodeAnalysis.CSharp.Desktop.dll" />
+    <None Include="Lib\Roslyn\Microsoft.CodeAnalysis.CSharp.dll" />
+    <None Include="Lib\Roslyn\Microsoft.CodeAnalysis.Desktop.dll" />
+    <None Include="Lib\Roslyn\Microsoft.CodeAnalysis.dll" />
+    <None Include="Lib\Roslyn\System.Collections.Immutable.dll" />
+    <None Include="Lib\Roslyn\System.Reflection.Metadata.dll" />
   </ItemGroup>
 </Project>

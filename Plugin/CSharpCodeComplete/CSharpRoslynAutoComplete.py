@@ -4,7 +4,7 @@ import os
 import threading
 import subprocess
 
-class CSharpCodeCompleteCommand(sublime_plugin.TextCommand):
+class CSharpRoslynAutoCompleteCommand(sublime_plugin.TextCommand):
 
 	def run(self, edit):
 		sel = self.view.sel()[0]
@@ -20,9 +20,8 @@ def RunCodeComplete( stringData, codeCompleteCommand ):
 				print("Inserting " + results[index])
 				codeCompleteCommand.view.insert(edit, sel.begin(), results[index])
 
-
 	command = "mono"
-	executable = r"~/Library/Application Support/Sublime Text 3/Packages/CSharpCodeComplete/Service/CSharpCodeCompleteClient.exe"
+	executable = r"~/Library/Application Support/Sublime Text 3/Packages/CSharpRoslynAutoComplete/CSharpRoslynAutoCompleteClient.exe"
 	executable = os.path.expanduser( executable )
 	code = stringData[0]
 	cursor = stringData[1]
