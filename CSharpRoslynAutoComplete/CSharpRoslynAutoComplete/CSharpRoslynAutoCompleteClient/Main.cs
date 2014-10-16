@@ -135,44 +135,39 @@ namespace CSharpRoslynAutoCompleteClient
 			// Check for interactive mode
 			if (useInteractiveMode)
 			{
-				while (true)
+				//int origRow = Console.CursorTop;
+				//int origCol = Console.CursorLeft;
+				//Console.SetCursorPosition(origCol, origRow);
+				Console.WriteLine();
+				Console.WriteLine("Press the arrow keys LEFT and RIGHT to move the cursor, then ENTER to set it. ESC to quit.");
+
+				ConsoleKeyInfo cki;
+				do
 				{
-					Console.WriteLine();
-					Console.WriteLine("Press the arrow keys LEFT and RIGHT to move the cursor, then ENTER to set it. ESC to quit.");
-
-					ConsoleKeyInfo cki;
-					do
+					cki = Console.ReadKey(true);
+					if (cki.Key == ConsoleKey.LeftArrow)
 					{
-						cki = Console.ReadKey(true);
-						if (cki.Key == ConsoleKey.Escape)
+						cursor--;
+						if (cursor < 0)
 						{
-							Console.WriteLine("Bye!");
-							return;
+							cursor = 0;
 						}
-						else if (cki.Key == ConsoleKey.LeftArrow)
-						{
-							cursor--;
-							if (cursor < 0)
-							{
-								cursor = 0;
-							}
-						}
-						else if (cki.Key == ConsoleKey.RightArrow)
-						{
-							cursor++;
-							if (cursor > code.Length - 1)
-							{
-								cursor = code.Length - 1;
-							}
-						}
-						else if (cki.Key != ConsoleKey.Enter)
-						{
-							continue;
-						}
-
-						PrintVerboseProgramInfo(code, cursor);
 					}
-					while (cki.Key != ConsoleKey.Enter);
+					else if (cki.Key == ConsoleKey.RightArrow)
+					{
+						cursor++;
+						if (cursor > code.Length - 1)
+						{
+							cursor = code.Length - 1;
+						}
+					}
+
+					PrintVerboseProgramInfo(code, cursor);
+
+					if (cki.Key != ConsoleKey.Enter)
+					{
+						continue;
+					}
 
 					Console.WriteLine();
 					suggestions = prompter.Prompt(code, cursor, assemblyPaths, verbosity);
@@ -182,8 +177,13 @@ namespace CSharpRoslynAutoCompleteClient
 					{
 						Console.WriteLine(s);
 					}
-				}
+
+					Console.WriteLine();
+					Console.WriteLine("Press the arrow keys LEFT and RIGHT to move the cursor, then ENTER to set it. ESC to quit.");
+				} while (cki.Key != ConsoleKey.Escape);
 			}
+
+			Console.WriteLine("Bye!");
 		}
 
 		static void ShowHelp(OptionSet p)
