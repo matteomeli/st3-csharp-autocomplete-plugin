@@ -12,7 +12,7 @@ namespace CSharpRoslynAutoComplete
 {
 	public class CSharpPrompter
 	{
-		public List<string> Prompt(string code, int position, List<string> references)
+		public List<string> Prompt(string code, int position, List<string> references, int verbosity = 0)
 		{
 			code = code.Trim();
 
@@ -65,8 +65,7 @@ namespace CSharpRoslynAutoComplete
 			foreach (var symbol in symbols)
 			{
 				if (symbol.CanBeReferencedByName == false
-				    || symbol.DeclaredAccessibility != Accessibility.Public
-					|| symbol.IsStatic)
+				    || symbol.DeclaredAccessibility != Accessibility.Public)
 					continue;
 
 				var result = symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
