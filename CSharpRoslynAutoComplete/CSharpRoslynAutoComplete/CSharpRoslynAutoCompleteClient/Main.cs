@@ -135,13 +135,20 @@ namespace CSharpRoslynAutoCompleteClient
 			// Check for interactive mode
 			if (useInteractiveMode)
 			{
-				//int origRow = Console.CursorTop;
-				//int origCol = Console.CursorLeft;
-				//Console.SetCursorPosition(origCol, origRow);
 				Console.WriteLine();
 				Console.WriteLine("Press the arrow keys LEFT and RIGHT to move the cursor, then ENTER to set it. ESC to quit.");
 
+				// Handle CTRL+C gracefully
+				Console.CancelKeyPress += new ConsoleCancelEventHandler((object sender, ConsoleCancelEventArgs ceargs) => {
+					// Terminate on CTRL+C as on ESC
+					ceargs.Cancel = false;
+
+					Console.SetCursorPosition(0, Console.CursorTop + 3);
+					Console.WriteLine("Bye!");
+				});
+
 				ConsoleKeyInfo cki;
+
 				do
 				{
 					cki = Console.ReadKey(true);
@@ -161,8 +168,9 @@ namespace CSharpRoslynAutoCompleteClient
 							cursor = code.Length - 1;
 						}
 					}
-
+						
 					PrintVerboseProgramInfo(code, cursor);
+					Console.SetCursorPosition(0, Console.CursorTop - 3);
 
 					if (cki.Key != ConsoleKey.Enter)
 					{
@@ -180,9 +188,11 @@ namespace CSharpRoslynAutoCompleteClient
 
 					Console.WriteLine();
 					Console.WriteLine("Press the arrow keys LEFT and RIGHT to move the cursor, then ENTER to set it. ESC to quit.");
-				} while (cki.Key != ConsoleKey.Escape);
+				}
+				while (cki.Key != ConsoleKey.Escape);
 			}
 
+			Console.SetCursorPosition(0, Console.CursorTop + 3);
 			Console.WriteLine("Bye!");
 		}
 
@@ -197,12 +207,8 @@ namespace CSharpRoslynAutoCompleteClient
 
 		static void PrintVerboseProgramInfo(string code, int cursor)
 		{
-			Console.WriteLine();
-			Console.Write("PROGRAM (cursor is at "); 
-			Console.ForegroundColor = ConsoleColor.Green;
-			Console.Write(cursor);
-			Console.ResetColor();
-			Console.WriteLine("):");
+			Console.WriteLine(); 
+			Console.WriteLine("PROGRAM"); 
 
 			int currentChar = 0;
 			foreach (Char c in code.ToCharArray())
