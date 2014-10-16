@@ -8,7 +8,8 @@ namespace CSharpRoslynAutoCompleteClient
 {
 	class MainClass
 	{
-		static int verbosity;
+		static CSharpPrompter prompter = new CSharpPrompter();
+		static int verbosity = 0;
 
 		public static void Main(string[] args)
 		{
@@ -118,48 +119,11 @@ namespace CSharpRoslynAutoCompleteClient
 			// Verbose output
 			if (verbosity > 0 || useInteractiveMode)
 			{
+				PrintVerboseAdditionalAssembliesInfo(assemblyPaths);
+				PrintVerboseProgramInfo(code, cursor);
 				Console.WriteLine();
-
-				Console.Write("PROGRAM (cursor is at "); 
-				Console.ForegroundColor = ConsoleColor.Green;
-				Console.Write(cursor);
-				Console.ResetColor();
-				Console.WriteLine("):");
-
-				int currentChar = 0;
-				foreach (Char c in code.ToCharArray())
-				{
-					if (currentChar == cursor)
-					{
-						Console.ForegroundColor = ConsoleColor.Green;
-					}
-
-					if (currentChar == cursor && Char.IsWhiteSpace(c))
-					{
-						Console.Write("_");
-					}
-					else
-					{
-						Console.Write(c);
-					}
-
-					if (currentChar == cursor)
-					{
-						Console.ResetColor();
-					}
-
-					currentChar++;
-				}
-				Console.WriteLine();
-
-				Console.WriteLine();
-				Console.WriteLine("LIST OF ASSEMBLIES:");
-				assemblyPaths.ForEach(t => Console.WriteLine(t));
-				Console.WriteLine();
-				Console.WriteLine("SUGGESTIONS:");
 			}
 
-			var prompter = new CSharpPrompter();
 			var suggestions = prompter.Prompt(code, cursor, assemblyPaths, verbosity);
 
 			// Print any found suggestions
@@ -168,72 +132,46 @@ namespace CSharpRoslynAutoCompleteClient
 				Console.WriteLine(s);
 			}
 
+			// Check for interactive mode
 			if (useInteractiveMode)
 			{
 				while (true)
 				{
 					Console.WriteLine();
-					Console.Write("Enter new cursor position (or type 'q' or 'quit' to exit) > ");
-					string input = Console.ReadLine();
-					if (input.Contains("quit") || input.Contains("q"))
-					{
-						break;
-					}
+					Console.WriteLine("Press the arrow keys LEFT and RIGHT to move the cursor, then ENTER to set it. ESC to quit.");
 
-					if (int.TryParse(input, out cursor) == false)
+					ConsoleKeyInfo cki;
+					do
 					{
-						Console.ForegroundColor = ConsoleColor.Red;
-						Console.WriteLine("Enter a number or type 'q' or 'quit' to exit.");
-						Console.ResetColor();
-						continue;
-					}
-
-					if (cursor < 0 || cursor > code.Length)
-					{
-						Console.ForegroundColor = ConsoleColor.Red;
-						Console.WriteLine("The required cursor position is not in range within program string. Try again.");
-						Console.ResetColor();
-						continue;
-					}
-
-					Console.Write("PROGRAM (cursor is at "); 
-					Console.ForegroundColor = ConsoleColor.Green;
-					Console.Write(cursor);
-					Console.ResetColor();
-					Console.WriteLine("):");
-
-					int currentChar = 0;
-					foreach (Char c in code.ToCharArray())
-					{
-						if (currentChar == cursor)
+						cki = Console.ReadKey(true);
+						if (cki.Key == ConsoleKey.Escape)
 						{
-							Console.ForegroundColor = ConsoleColor.Green;
+							Console.WriteLine("Bye!");
+							return;
+						}
+						// Cache arrow presses
+						if (cki.Key == ConsoleKey.LeftArrow)
+						{
+							cursor--;
+						}
+						else if (cki.Key == ConsoleKey.RightArrow)
+						{
+							cursor++;
 						}
 
-						if (currentChar == cursor && Char.IsWhiteSpace(c))
+						if (cursor < 0 || cursor > code.Length)
 						{
-							Console.Write("_");
-						}
-						else
-						{
-							Console.Write(c);
-						}
-
-						if (currentChar == cursor)
-						{
+							Console.ForegroundColor = ConsoleColor.Red;
+							Console.WriteLine("The required cursor position is not in range within program string. Try again.");
 							Console.ResetColor();
+							continue;
 						}
 
-						currentChar++;
+						PrintVerboseProgramInfo(code, cursor);
 					}
-					Console.WriteLine();
+					while (cki.Key != ConsoleKey.Enter);
 
 					Console.WriteLine();
-					Console.WriteLine("LIST OF ASSEMBLIES:");
-					assemblyPaths.ForEach(t => Console.WriteLine(t));
-					Console.WriteLine();
-					Console.WriteLine("SUGGESTIONS:");
-
 					suggestions = prompter.Prompt(code, cursor, assemblyPaths, verbosity);
 
 					// Print any found suggestions
@@ -252,6 +190,49 @@ namespace CSharpRoslynAutoCompleteClient
 			Console.WriteLine();
 			Console.WriteLine("Options:");
 			p.WriteOptionDescriptions(Console.Error);
+		}
+
+		static void PrintVerboseProgramInfo(string code, int cursor)
+		{
+			Console.WriteLine();
+			Console.Write("PROGRAM (cursor is at "); 
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.Write(cursor);
+			Console.ResetColor();
+			Console.WriteLine("):");
+
+			int currentChar = 0;
+			foreach (Char c in code.ToCharArray())
+			{
+				if (currentChar == cursor)
+				{
+					Console.ForegroundColor = ConsoleColor.Green;
+				}
+
+				if (currentChar == cursor && Char.IsWhiteSpace(c))
+				{
+					Console.Write("_");
+				}
+				else
+				{
+					Console.Write(c);
+				}
+
+				if (currentChar == cursor)
+				{
+					Console.ResetColor();
+				}
+
+				currentChar++;
+			}
+			Console.WriteLine();
+		}
+
+		static void PrintVerboseAdditionalAssembliesInfo(List<string> assemblyPaths)
+		{
+			Console.WriteLine();
+			Console.WriteLine("INCLUDED ASSEMBLIES:");
+			assemblyPaths.ForEach(t => Console.WriteLine(t));
 		}
 	}
 }
