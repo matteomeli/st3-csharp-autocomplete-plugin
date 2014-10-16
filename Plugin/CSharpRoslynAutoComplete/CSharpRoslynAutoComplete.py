@@ -55,13 +55,20 @@ class CSharpRoslynAutoCompleteCall(threading.Thread):
 		self.result = None
 		self.pp = subprocess.PIPE
 		self.cwd = os.path.dirname(__file__)
-		self.command = "mono"
-		self.executable = "CSharpRoslynAutoCompleteClient.exe"
+		self.command = 'mono'
+		self.executable = 'CSharpRoslynAutoCompleteClient.exe'
+		self.assemblies = [ 
+			'/Applications/Unity454/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll', 
+			'/Applications/Unity454/Unity.app/Contents/Frameworks/Managed/UnityEditor.dll'
+		]
 		threading.Thread.__init__(self)
 
 	def run(self):
-		p = subprocess.Popen([self.command, self.executable, self.code, str(self.cursor)], 
-			cwd = self.cwd, stdout = self.pp, stderr = self.pp)
+		commandLineArgs = [self.command, self.executable, "-p", self.code, "-c", str(self.cursor), "-d"]
+		for a in self.assemblies:
+			commandLineArgs.append(a)
+
+		p = subprocess.Popen(commandLineArgs, cwd = self.cwd, stdout = self.pp, stderr = self.pp)
 		o, e = p.communicate()
 		p.wait()
 

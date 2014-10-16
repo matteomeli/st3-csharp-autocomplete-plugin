@@ -190,10 +190,10 @@ namespace CSharpRoslynAutoCompleteClient
 					Console.WriteLine("Press the arrow keys LEFT and RIGHT to move the cursor, then ENTER to set it. ESC to quit.");
 				}
 				while (cki.Key != ConsoleKey.Escape);
-			}
 
-			Console.SetCursorPosition(0, Console.CursorTop + 3);
-			Console.WriteLine("Bye!");
+				Console.SetCursorPosition(0, Console.CursorTop + 3);
+				Console.WriteLine("Bye!");
+			}
 		}
 
 		static void ShowHelp(OptionSet p)
