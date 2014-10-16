@@ -149,21 +149,24 @@ namespace CSharpRoslynAutoCompleteClient
 							Console.WriteLine("Bye!");
 							return;
 						}
-						// Cache arrow presses
-						if (cki.Key == ConsoleKey.LeftArrow)
+						else if (cki.Key == ConsoleKey.LeftArrow)
 						{
 							cursor--;
+							if (cursor < 0)
+							{
+								cursor = 0;
+							}
 						}
 						else if (cki.Key == ConsoleKey.RightArrow)
 						{
 							cursor++;
+							if (cursor > code.Length - 1)
+							{
+								cursor = code.Length - 1;
+							}
 						}
-
-						if (cursor < 0 || cursor > code.Length)
+						else if (cki.Key != ConsoleKey.Enter)
 						{
-							Console.ForegroundColor = ConsoleColor.Red;
-							Console.WriteLine("The required cursor position is not in range within program string. Try again.");
-							Console.ResetColor();
 							continue;
 						}
 
