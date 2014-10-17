@@ -29,6 +29,7 @@ Todo
 1. Support other C# syntax kinds in the parser.
 2. Add delay real-time suggestions popup (not only on invocation) to the plugin.
 3. Add unit tests.
+4. Add syntax checking.
 
 License
 ==================
