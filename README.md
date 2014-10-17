@@ -30,6 +30,7 @@ Todo
 2. Add delay real-time suggestions popup (not only on invocation) to the plugin.
 3. Add unit tests.
 4. Add syntax checking.
+5. Make auto-complete popup handle better filtering and colours (more like the Sublime built-in auto-complete plugin).
 
 License
 ==================
