@@ -7,10 +7,11 @@ import threading
 class CSharpRoslynAutoCompleteCommand(sublime_plugin.TextCommand):
 
 	def run(self, edit):
+		assemblyPaths = sublime.load_settings('CSharpRoslynAutoComplete.sublime-settings').get('assemblyPaths')
 		code = self.view.substr(sublime.Region(0, self.view.size()))
 		cursor = self.view.sel()[0].begin()
 
-		thread = CSharpRoslynAutoCompleteCall(code, cursor)
+		thread = CSharpRoslynAutoCompleteCall(code, cursor, assemblyPaths)
 		thread.start()
 
 		self.handle_thread(edit, thread)
@@ -49,7 +50,7 @@ class CSharpRoslynAutoCompleteCommand(sublime_plugin.TextCommand):
 
 class CSharpRoslynAutoCompleteCall(threading.Thread):
 
-	def __init__(self, code, cursor):
+	def __init__(self, code, cursor, assemblyPaths):
 		self.code = code
 		self.cursor = cursor
 		self.result = None
@@ -57,16 +58,13 @@ class CSharpRoslynAutoCompleteCall(threading.Thread):
 		self.cwd = os.path.dirname(__file__)
 		self.command = 'mono'
 		self.executable = 'CSharpRoslynAutoCompleteClient.exe'
-		self.assemblies = [ 
-			'/Applications/Unity454/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll', 
-			'/Applications/Unity454/Unity.app/Contents/Frameworks/Managed/UnityEditor.dll'
-		]
+		self.assemblyPaths = assemblyPaths
 		threading.Thread.__init__(self)
 
 	def run(self):
 		commandLineArgs = [self.command, self.executable, "-p", self.code, "-c", str(self.cursor), "-d"]
-		for a in self.assemblies:
-			commandLineArgs.append(a)
+		for ap in self.assemblyPaths:
+			commandLineArgs.append(ap)
 
 		p = subprocess.Popen(commandLineArgs, cwd = self.cwd, stdout = self.pp, stderr = self.pp)
 		o, e = p.communicate()
