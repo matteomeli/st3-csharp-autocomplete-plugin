@@ -9,14 +9,14 @@ Installation
 1. Copy the content of the "Plugin" folder into your ST3 "Packages" folder.
 2. Add into your ST3 keymap file a key shortcut to invoke the plugin. An example is `{ "keys": ["ctrl+shift+space"], "command": "c_sharp_code_complete"}`.
 3. Open the CSharpRoslynAutoComplete.sublime-settings file under the "User" folder and add custom C# assemblies you want to load, e.g.
-`
+```json
 {
 	"assemblyPaths":
 	[
 		"/Applications/AwesomeApp/AwesomeApp.app/Contents/Frameworks/Managed/awesome_app.dll"
 	]
 }
-`
+```
 
 Usage
 ==================
