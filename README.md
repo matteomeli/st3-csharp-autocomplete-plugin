@@ -13,7 +13,7 @@ Installation
 {
 	"assemblyPaths":
 	[
-		"/Applications/AnApp/AnApp.app/Contents/Bin/an_app.dll"
+		"/Applications/ExampleApp/ExampleApp.app/Contents/Bin/example_app.dll"
 	]
 }
 ```
