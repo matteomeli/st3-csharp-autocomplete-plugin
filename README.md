@@ -1,4 +1,4 @@
-Sublime Text CSharp Roslyn AutoComplete
+Sublime C# Roslyn Auto Complete
 ==================
 
 The starting point for a Roslyn-based Mono-powered C# code completion plugin for Sublime Text 3.
@@ -34,7 +34,7 @@ Todo
 
 License
 ==================
-All of Sublime Text CSharp Roslyn AutoComplete plugin is licensed under the MIT License (MIT).
+All of Sublime Sublime C# Roslyn Auto Complete plugin is licensed under the MIT License (MIT).
 
 Copyright (c) <2014> Matteo Meli <matteo.meli@gmail.com>
 
