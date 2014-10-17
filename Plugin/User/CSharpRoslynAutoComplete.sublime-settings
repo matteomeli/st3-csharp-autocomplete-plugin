@@ -1,0 +1,10 @@
+{
+	"assemblyPaths":
+	[
+		"/Applications/Unity454/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll", 
+		"/Applications/Unity454/Unity.app/Contents/Frameworks/Managed/UnityEditor.dll",
+		"/Users/matteom/repos/csr/RacerUnity/Library/ScriptAssemblies/Assembly-CSharp.dll",
+		"/Users/matteom/repos/csr/RacerUnity/Library/ScriptAssemblies/Assembly-CSharp-firstpass.dll",
+		"/Users/matteom/repos/csr/RacerUnity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll"
+	]
+}
