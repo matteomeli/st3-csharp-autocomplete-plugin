@@ -14,8 +14,9 @@ namespace CSharpRoslynAutoCompleteClient
 		public static void Main(string[] args)
 		{
 			bool show_help = false;
-			string currentParameter = string.Empty;
 			bool useInteractiveMode = false;
+			string currentParameter = string.Empty;
+			string codeFilepath = string.Empty;
 
 			string code = string.Empty;
 			int cursor = -1;
@@ -28,6 +29,12 @@ namespace CSharpRoslynAutoCompleteClient
 					"the {PROGRAM} string to parse.", 
 					v => {
 						currentParameter = "p";
+					}
+				},
+				{ "f|file",
+					"the {FILE} to load the {PROGRAM} string to parse from.",
+					v => {
+						currentParameter = "f";
 					}
 				},
 				{ "c|cursor", 
@@ -60,9 +67,6 @@ namespace CSharpRoslynAutoCompleteClient
 				{ "<>", v => {
 						switch (currentParameter)
 						{
-							case "d":
-								assemblyPaths.Add(v);
-								break;
 							case "p":
 								// Only parse the first string passed
 								if (string.IsNullOrEmpty(code))
@@ -77,6 +81,13 @@ namespace CSharpRoslynAutoCompleteClient
 										cursor = -1;
 									}
 								}
+								break;
+							case "d":
+								assemblyPaths.Add(v);
+								break;
+							
+							case "f":
+								codeFilepath = v;
 								break;
 						}
 					}
@@ -102,10 +113,29 @@ namespace CSharpRoslynAutoCompleteClient
 				return;
 			}
 
+			// If a file was specified load the code string from it
+			if (string.IsNullOrEmpty(codeFilepath) == false)
+			{
+				try
+				{
+					var fullpath = Path.GetFullPath(codeFilepath);
+					var streamReader = new StreamReader(fullpath);
+					code = streamReader.ReadToEnd();
+					streamReader.Close();
+				}
+				catch (Exception e)
+				{
+					Console.Write("CSharpRoslynAutoCompleteClient.exe: ");
+					Console.WriteLine(e.Message);
+					Console.WriteLine("Try `CSharpRoslynAutoCompleteClient.exe --help' for more information.");
+					return;
+				}
+			}
+
 			// Check for required arguments
 			if (string.IsNullOrEmpty(code))
 			{
-				Console.WriteLine("CSharpRoslynAutoCompleteClient.exe: Missing required option -p|--program <PROGRAM>");
+				Console.WriteLine("CSharpRoslynAutoCompleteClient.exe: Missing required options -p|--program <PROGRAM> or -f|--file <FILEPATH>");
 				Console.WriteLine("Try `CSharpRoslynAutoCompleteClient.exe --help' for more information.");
 				return;
 			}
