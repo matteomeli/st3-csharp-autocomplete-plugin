@@ -151,8 +151,13 @@ namespace CSharpRoslynAutoCompleteClient
 				return;
 			}
 
+			if (useInteractiveMode)
+			{
+				verbosity++;
+			}
+
 			// Verbose output
-			if (verbosity > 0 || useInteractiveMode)
+			if (verbosity > 0)
 			{
 				PrintVerboseAdditionalAssembliesInfo(assemblyPaths);
 				PrintVerboseProgramInfo(code, cursor);
