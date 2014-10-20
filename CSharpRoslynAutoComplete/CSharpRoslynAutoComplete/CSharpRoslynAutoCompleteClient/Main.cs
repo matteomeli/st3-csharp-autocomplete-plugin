@@ -180,7 +180,7 @@ namespace CSharpRoslynAutoCompleteClient
 					// Terminate on CTRL+C as on ESC
 					ceargs.Cancel = false;
 
-					Console.SetCursorPosition(0, Console.CursorTop + (numCodeLines + 2));
+					//Console.SetCursorPosition(0, Console.CursorTop + (numCodeLines + 2));
 					Console.WriteLine("Bye!");
 				});
 
@@ -196,7 +196,7 @@ namespace CSharpRoslynAutoCompleteClient
 						{
 							cursor = 0;
 						}
-						while (Char.IsWhiteSpace(code[cursor]))
+						while (Char.IsWhiteSpace(code[cursor]) && code[cursor] != ' ')
 						{
 							cursor--;
 							if (cursor < 0)
@@ -213,7 +213,7 @@ namespace CSharpRoslynAutoCompleteClient
 						{
 							cursor = code.Length - 1;
 						}
-						while (Char.IsWhiteSpace(code[cursor]))
+						while (Char.IsWhiteSpace(code[cursor]) && code[cursor] != ' ')
 						{
 							cursor++;
 							if (cursor > code.Length - 1)
@@ -225,7 +225,7 @@ namespace CSharpRoslynAutoCompleteClient
 					}
 						
 					PrintVerboseProgramInfo(code, cursor);
-					Console.SetCursorPosition(0, Console.CursorTop - (numCodeLines + 2));
+					//Console.SetCursorPosition(0, Console.CursorTop - (numCodeLines + 2));
 
 					if (cki.Key != ConsoleKey.Enter)
 					{
@@ -246,7 +246,7 @@ namespace CSharpRoslynAutoCompleteClient
 				}
 				while (cki.Key != ConsoleKey.Escape);
 
-				Console.SetCursorPosition(0, Console.CursorTop + (numCodeLines + 2));
+				//Console.SetCursorPosition(0, Console.CursorTop + (numCodeLines + 2));
 				Console.WriteLine("Bye!");
 			}
 		}
