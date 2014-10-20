@@ -32,6 +32,8 @@ namespace CSharpRoslynAutoComplete
 
 			var parentNode = token.Parent;
 
+			Console.WriteLine("C# Kind: " + parentNode.CSharpKind());
+
 			ExpressionSyntax identifierNode = parentNode as ExpressionSyntax;                    
 			if (parentNode is MemberAccessExpressionSyntax)
 			{

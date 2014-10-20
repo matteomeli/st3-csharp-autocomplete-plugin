@@ -145,6 +145,11 @@ namespace CSharpRoslynAutoCompleteClient
 				Console.WriteLine("Try `CSharpRoslynAutoCompleteClient.exe --help' for more information.");
 				return;
 			}
+			else if (cursor > code.Length - 1)
+			{
+				Console.WriteLine("CSharpRoslynAutoCompleteClient.exe: The <CURSOR> is outside of the program string range.");
+				return;
+			}
 
 			// Verbose output
 			if (verbosity > 0 || useInteractiveMode)
@@ -168,12 +173,14 @@ namespace CSharpRoslynAutoCompleteClient
 				Console.WriteLine();
 				Console.WriteLine("Press the arrow keys LEFT and RIGHT to move the cursor, then ENTER to set it. ESC to quit.");
 
+				var numCodeLines = code.Split(new [] { '\r', '\n' }).Length;
+
 				// Handle CTRL+C gracefully
 				Console.CancelKeyPress += new ConsoleCancelEventHandler((object sender, ConsoleCancelEventArgs ceargs) => {
 					// Terminate on CTRL+C as on ESC
 					ceargs.Cancel = false;
 
-					Console.SetCursorPosition(0, Console.CursorTop + 3);
+					Console.SetCursorPosition(0, Console.CursorTop + (numCodeLines + 2));
 					Console.WriteLine("Bye!");
 				});
 
@@ -189,6 +196,15 @@ namespace CSharpRoslynAutoCompleteClient
 						{
 							cursor = 0;
 						}
+						while (Char.IsWhiteSpace(code[cursor]))
+						{
+							cursor--;
+							if (cursor < 0)
+							{
+								cursor = 0;
+								break;
+							}
+						}
 					}
 					else if (cki.Key == ConsoleKey.RightArrow)
 					{
@@ -197,10 +213,19 @@ namespace CSharpRoslynAutoCompleteClient
 						{
 							cursor = code.Length - 1;
 						}
+						while (Char.IsWhiteSpace(code[cursor]))
+						{
+							cursor++;
+							if (cursor > code.Length - 1)
+							{
+								cursor = code.Length - 1;
+								break;
+							}
+						}
 					}
 						
 					PrintVerboseProgramInfo(code, cursor);
-					Console.SetCursorPosition(0, Console.CursorTop - 3);
+					Console.SetCursorPosition(0, Console.CursorTop - (numCodeLines + 2));
 
 					if (cki.Key != ConsoleKey.Enter)
 					{
@@ -221,7 +246,7 @@ namespace CSharpRoslynAutoCompleteClient
 				}
 				while (cki.Key != ConsoleKey.Escape);
 
-				Console.SetCursorPosition(0, Console.CursorTop + 3);
+				Console.SetCursorPosition(0, Console.CursorTop + (numCodeLines + 2));
 				Console.WriteLine("Bye!");
 			}
 		}
@@ -248,7 +273,7 @@ namespace CSharpRoslynAutoCompleteClient
 					Console.ForegroundColor = ConsoleColor.Green;
 				}
 
-				if (currentChar == cursor && Char.IsWhiteSpace(c))
+				if (currentChar == cursor && c == ' ')
 				{
 					Console.Write("_");
 				}

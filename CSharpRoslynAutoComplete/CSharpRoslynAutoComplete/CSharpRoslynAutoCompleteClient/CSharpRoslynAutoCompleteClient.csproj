@@ -18,6 +18,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
+    <Commandlineparameters>-f "../../Test.cs" -c 100 -i</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -42,5 +43,8 @@
       <Project>{C247AC90-A214-424D-B1B6-E2177958A986}</Project>
       <Name>CSharpRoslynAutoComplete</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Test.cs" />
   </ItemGroup>
 </Project>
